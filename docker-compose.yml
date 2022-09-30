@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:18.0.2
+    entrypoint: ["/opt/keycloak/bin/kc.sh", "start-dev"]
+    container_name: keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_PROXY: edge
+      DEBUG_PORT: "*:5005"
+      DEBUG: "true"
+      SLACK_TOKEN: "${SLACK_TOKEN}"
+      SLACK_CHANNEL: "#random"
+      SLACK_INCLUDE_EVENTS: "LOGIN, LOGIN_ERROR"
+      SLACK_INCLUDE_EVENT_REPRESENTATION:
+      SLACK_INCLUDE_ALL_EVENTS:
+      SLACK_INCLUDE_ALL_EVENTS_EXCEPT:
+      SLACK_INCLUDE_ALL_ERRORS:
+      SLACK_INCLUDE_ALL_ERRORS_EXCEPT:
+      SLACK_INCLUDE_ADMIN_EVENTS:
+      SLACK_INCLUDE_ALL_ADMIN_EVENTS: "true"
+      SLACK_INCLUDE_ADMIN_EVENT_REPRESENTATION:
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - type: bind
+        source: ./target/keycloak-event-listener-slack-SNAPSHOT.jar
+        target: /opt/keycloak/providers/keycloak-event-listener-slack.jar
