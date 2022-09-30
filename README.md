@@ -58,8 +58,7 @@ to do that simply mention app by name at the desired channel, for e.g. `@Keycloa
 slack will ask if you want to add app to channel, click accept button.
 
 <p align="center">
-    <img src="./.github/docs/adding-app-to-channel-1.png" alt="Adding app to Slack channel - step 1">
-    <img src="./.github/docs/adding-app-to-channel-2.png" alt="Adding app to Slack channel - step 2">
+    <img src="./.github/docs/adding-app-to-channel.png" alt="Adding app to Slack channel">
 </p>
 
 Done! From now Slack is ready to receiving messages from Keycloak.
