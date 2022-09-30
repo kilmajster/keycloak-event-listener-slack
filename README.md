@@ -34,11 +34,11 @@ ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
 ### Configuration
 
 #### Creating and configuring Slack app
-Go to https://api.slack.com/apps and click _Create New App_, choose options _From scratch_ and provide _App Name_ 
-e.g. `Keycloak` and choose app installation workspace.
+Go to https://api.slack.com/apps and click _Create New App_, choose option _From scratch_ and provide _App Name_ 
+e.g. `Keycloak` then choose app installation workspace.
 
 <p align="center">
-    <img src="./github/docs/app-name-and-choose-workspace.png" alt="Choosing Slack app name & installation workspace">
+    <img src="./.github/docs/app-name-and-choose-workspace.png" alt="Choosing Slack app name & installation workspace">
 </p>
 
 After creating an app, go to its features and choose _Activate Incoming Webhooks_ and then click 
@@ -48,7 +48,7 @@ When Incoming Webhooks are active, go to _OAuth & Permissions_ and in _Scopes_ a
 (you could need to reinstall app into workspace at this point)
 
 <p align="center">
-    <img src="./github/docs/configuring-slack-app-scopes.png" alt="Configuration of Slack app scopes">
+    <img src="./.github/docs/configuring-slack-app-scopes.png" alt="Configuration of Slack app scopes">
 </p>
 
 After that, copy `Bot User OAuth Token` (`xoxb-123123123...`) - you will need to add it as env variable for Keycloak.
@@ -58,8 +58,8 @@ to do that simply mention app by name at the desired channel, for e.g. `@Keycloa
 slack will ask if you want to add app to channel, click accept button.
 
 <p align="center">
-    <img src="./github/docs/adding-app-to-channel-1.png" alt="Adding app to Slack channel - step 1">
-    <img src="./github/docs/adding-app-to-channel-2.png" alt="Adding app to Slack channel - step 2">
+    <img src="./.github/docs/adding-app-to-channel-1.png" alt="Adding app to Slack channel - step 1">
+    <img src="./.github/docs/adding-app-to-channel-2.png" alt="Adding app to Slack channel - step 2">
 </p>
 
 Done! From now Slack is ready to receiving messages from Keycloak.
