@@ -1,5 +1,5 @@
 <h1 align="center">
-    Keycloak event listener Slack
+    Keycloak Event Listener Slack
     <br>
     <a href="https://github.com/kilmajster/keycloak-event-listener-slack/actions">
         <img align="center" src="https://github.com/kilmajster/keycloak-event-listener-slack/workflows/main/badge.svg" alt="CI status badge">
@@ -15,6 +15,10 @@
 ### Project description
 This project is an extension for Keycloak that allows to forward events to specified Slack channel. 
 It's build for Keycloak X (quarkus), so it won't work with legacy Wildfly based Keycloak distributions.
+
+<p align="center">
+    <img src="./.github/docs/keycloak-event-slack-message-preview.png" alt="Keycloak event Slack message preview">
+</p>
 
 ### Set up with Keycloak
 Minimal Dockerfile for bundling this extension together with Keycloak could look like following:
@@ -55,7 +59,7 @@ After that, copy `Bot User OAuth Token` (`xoxb-123123123...`) - you will need to
 
 Last step is to add app you just created to specific channel, 
 to do that simply mention app by name at the desired channel, for e.g. `@Keycloak`, 
-slack will ask if you want to add app to channel, click accept button.
+Slack will ask if you want to add app to channel, click accept button.
 
 <p align="center">
     <img src="./.github/docs/adding-app-to-channel.png" alt="Adding app to Slack channel">
@@ -70,7 +74,7 @@ Keycloak configuration is done based on environment variables. All their names a
 - `SLACK_TOKEN` - Slack _Bot User OAuth Token_. E.g. `"xoxb-123123123..."`
 
 
-- `SLACK_CHANNEL`- channel used for forwarding events to. Can be channel name with # (`#general`) or channel id (`C03V7AT6DHS`)
+- `SLACK_CHANNEL`- channel used for forwarding events to. Can be channel name with # (`#general`) or channel ID (`C03V7AT6DHS`)
 
 
 - `SLACK_INCLUDE_EVENTS` - comma-separated list of event types that should be forward to Slack. When present, 
@@ -81,7 +85,8 @@ other event related env variables are ignored. E.g. `"LOGIN, LOGIN_ERROR, LOGOUT
 Available values are `"true"` / `"false"`.
 
 
-- `SLACK_INCLUDE_ALL_EVENTS_EXCEPT` - comma-separated list of event types exceptions, all other will be forwarded to Slack
+- `SLACK_INCLUDE_ALL_EVENTS_EXCEPT` - comma-separated list of event types exceptions, all other will be forwarded to Slack.
+E.g. `"LOGIN, LOGIN_ERROR"`
 
 
 - `SLACK_INCLUDE_ALL_ERRORS` - for forwarding all possible error events. Available values are `"true"` / `"false"`.
@@ -105,15 +110,23 @@ By default, events json representation will be attached to the message. It can b
 - `SLACK_INCLUDE_ADMIN_EVENT_REPRESENTATION="false""` - for admin events
 
 ### Enabling listener in Keycloak
-In the Keycloak admin console, choose realm and under _manage_ go to _Events_. Switch to the _Config tab_ and add 
-_slack_ to the _Event Listeners_ then click _Save_ button.
+In the Keycloak admin console, choose realm and under _manage_ section go to _Events_. Switch to the _Config tab_ and add 
+`slack` to the _Event Listeners_ then click _Save_ button.
 
 <p align="center">
     <img src="./.github/docs/adding-slack-listener-in-admin-console.png" alt="Adding Slack listener in Keycloak admin console">
 </p>
 
-Done, Keycloak is ready to send messages with events to your Slack.
+🕶 Done, Keycloak is ready to send messages with events to your Slack.
 
 ### Development & testing
-TODO
-
+To build a project, do following:
+```shell
+$ mvn clean install
+```
+You will need Slack workspace and app configured same as in _Configuration_ section, update `SLACK_TOKEN` and `SLACK_CHANNEL`
+in `docker-compose.yml` file and run:
+```shell
+$ docker-compose up
+```
+Enable listener, just like it is described in _Enabling listener in Keycloak_ section.
