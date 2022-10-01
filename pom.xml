@@ -181,6 +181,7 @@
                 </executions>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
                             <include>org.apache.commons:commons-collections4</include>
