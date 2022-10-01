@@ -121,12 +121,12 @@ In the Keycloak admin console, choose realm and under _manage_ section go to _Ev
 
 ### Development & testing
 To build a project, do following:
-```shell
+```sh
 $ mvn clean install
 ```
 You will need Slack workspace and app configured same as in _Configuration_ section, update `SLACK_TOKEN` and `SLACK_CHANNEL`
 in `docker-compose.yml` file and run:
-```shell
+```sh
 $ docker-compose up
 ```
 Enable listener, just like it is described in _Enabling listener in Keycloak_ section.
