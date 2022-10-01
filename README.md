@@ -61,14 +61,59 @@ slack will ask if you want to add app to channel, click accept button.
     <img src="./.github/docs/adding-app-to-channel.png" alt="Adding app to Slack channel">
 </p>
 
-Done! From now Slack is ready to receiving messages from Keycloak.
+👏 Done! From now Slack is ready to receiving messages from Keycloak.
 
-#### Configuring events to forward
+> In case of missing configuration `WARN` with error code will be logged. All error codes are described [here](https://api.slack.com/methods/chat.postMessage#errors).
+
+#### Configuring Keycloak
+Keycloak configuration is done based on environment variables. All their names and descriptions are listed below:
+- `SLACK_TOKEN` - Slack _Bot User OAuth Token_. E.g. `"xoxb-123123123..."`
+
+
+- `SLACK_CHANNEL`- channel used for forwarding events to. Can be channel name with # (`#general`) or channel id (`C03V7AT6DHS`)
+
+
+- `SLACK_INCLUDE_EVENTS` - comma-separated list of event types that should be forward to Slack. When present, 
+other event related env variables are ignored. E.g. `"LOGIN, LOGIN_ERROR, LOGOUT, LOGOUT_ERROR"`
+
+
+- `SLACK_INCLUDE_ALL_EVENTS` - for forwarding all possible events, good for testing purposes, not recommended for production.
+Available values are `"true"` / `"false"`.
+
+
+- `SLACK_INCLUDE_ALL_EVENTS_EXCEPT` - comma-separated list of event types exceptions, all other will be forwarded to Slack
+
+
+- `SLACK_INCLUDE_ALL_ERRORS` - for forwarding all possible error events. Available values are `"true"` / `"false"`.
+
+
+- `SLACK_INCLUDE_ALL_ERRORS_EXCEPT` - comma-separated list of error events exceptions, all other errors will be sent to Slack.
+E.g. `"LOGIN_ERROR, LOGOUT_ERROR, UPDATE_PASSWORD_ERROR"`
+
+
+- `SLACK_INCLUDE_ADMIN_EVENTS` - comma-separated list of admin operations (such as users creation, clients changes etc.).
+Available values are `CREATE, UPDATE, DELETE, ACTION`
+
+
+- `SLACK_INCLUDE_ALL_ADMIN_EVENTS` - for forwarding all events done by admin. Available values are `"true"` / `"false"`.
 
 #### Configuring message format
+By default, events json representation will be attached to the message. It can be disabled by:
+- `SLACK_INCLUDE_EVENT_REPRESENTATION="false"` - for normal event types
+
+
+- `SLACK_INCLUDE_ADMIN_EVENT_REPRESENTATION="false""` - for admin events
 
 ### Enabling listener in Keycloak
+In the Keycloak admin console, choose realm and under _manage_ go to _Events_. Switch to the _Config tab_ and add 
+_slack_ to the _Event Listeners_ then click _Save_ button.
+
+<p align="center">
+    <img src="./.github/docs/adding-slack-listener-in-admin-console.png" alt="Adding Slack listener in Keycloak admin console">
+</p>
+
+Done, Keycloak is ready to send messages with events to your Slack.
 
 ### Development & testing
-
+TODO
 
