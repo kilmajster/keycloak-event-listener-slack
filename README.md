@@ -4,9 +4,15 @@
     <a href="https://github.com/kilmajster/keycloak-event-listener-slack/actions">
         <img align="center" src="https://github.com/kilmajster/keycloak-event-listener-slack/workflows/main/badge.svg" alt="CI status badge">
     </a>
-    <img align="center" src="https://img.shields.io/github/last-commit/kilmajster/keycloak-event-listener-slack.svg" alt="Github last commit badge">
-    <img align="center" src="https://img.shields.io/maven-central/v/io.github.kilmajster/keycloak-event-listener-slack?color=blue" alt="Maven Central badge" >
-    <img align="center" src="https://img.shields.io/github/license/kilmajster/keycloak-event-listener-slack?color=blue" alt="MIT license badge">
+    <a href="https://github.com/kilmajster/keycloak-event-listener-slack/commits/main">
+        <img align="center" src="https://img.shields.io/github/last-commit/kilmajster/keycloak-event-listener-slack.svg" alt="Github last commit badge">
+    </a>
+    <a href="https://mvnrepository.com/artifact/io.github.kilmajster/keycloak-event-listener-slack">
+        <img align="center" src="https://img.shields.io/maven-central/v/io.github.kilmajster/keycloak-event-listener-slack?color=blue" alt="Maven Central badge" >
+    </a>
+    <a href="./LICENSE">
+        <img align="center" src="https://img.shields.io/github/license/kilmajster/keycloak-event-listener-slack?color=blue" alt="MIT license badge">
+    </a>
     <a href="https://keycloak-listener.slack.com/messages/C03V7AT6DHS">
         <img align="center" src="https://img.shields.io/badge/slack-keycloak--listener-ff69b4.svg?logo=slack" alt="CI status badge">
     </a>
