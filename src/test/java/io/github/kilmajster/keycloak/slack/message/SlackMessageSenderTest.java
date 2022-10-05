@@ -48,7 +48,7 @@ class SlackMessageSenderTest {
         final Event event = mock(Event.class);
 
         try (MockedStatic<SlackEventMessage> slackEventMessageMockedStatic = mockStatic(SlackEventMessage.class)) {
-            final List<LayoutBlock> messageBlocks = mock(List.class);
+            final List<?> messageBlocks = mock(List.class);
             slackEventMessageMockedStatic.when(
                     () -> SlackEventMessage.getEventMessageBlocks(
                             eq(event),
@@ -99,7 +99,7 @@ class SlackMessageSenderTest {
         final AdminEvent adminEvent = mock(AdminEvent.class);
 
         try (MockedStatic<SlackEventMessage> slackEventMessageMockedStatic = mockStatic(SlackEventMessage.class)) {
-            final List<LayoutBlock> messageBlocks = mock(List.class);
+            final List<?> messageBlocks = mock(List.class);
             slackEventMessageMockedStatic.when(
                     () -> SlackEventMessage.getEventMessageBlocks(
                             eq(adminEvent),
