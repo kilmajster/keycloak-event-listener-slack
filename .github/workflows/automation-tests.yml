@@ -23,4 +23,4 @@ jobs:
         run: mvn -B -ntp package
 
       - name: Run automation tests
-        run: mvn -B -ntp verify -P automation-tests -D slack.token=${CI_SLACK_TOKEN} -D slack.channel=automation-tests -D selenide.headless=true
+        run: mvn -B -ntp verify -P automation-tests -D slack.token=${{ secrets.SLACK_TOKEN }} -D slack.channel=automation-tests -D selenide.headless=true

@@ -1,8 +1,12 @@
 package io.github.kilmajster.keycloak.slack.cucumber;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.slack.api.Slack;
 import com.slack.api.model.Conversation;
 import com.slack.api.model.Message;
+import com.slack.api.model.block.ContextBlock;
+import com.slack.api.model.block.composition.MarkdownTextObject;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
@@ -10,8 +14,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.events.EventType;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -23,7 +29,9 @@ import org.testcontainers.containers.wait.strategy.Wait;
 
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -152,10 +160,31 @@ public class Steps {
         log.info("Found channel id = {}", channelId);
 
         Message latestSlackMessage = findLatestSlackMessage(channelId);
-
         log.info("Fetched latest Slack message = {}", latestSlackMessage);
 
+        ObjectNode details = extractEventDetails(latestSlackMessage);
+        long time = details.get("time").asLong();
+        String type = details.get("type").asText();
+
+        assertThat(new Timestamp(time)).isEqualToIgnoringSeconds(new Date());
+        assertThat(type).isEqualTo(EventType.LOGIN.name());
         assertThat(latestSlackMessage.toString()).contains(TEST_USERNAME);
+    }
+
+    @SneakyThrows
+    private ObjectNode extractEventDetails(Message message) {
+        String markdownDetailsText = ((MarkdownTextObject) ((ContextBlock) message
+                .getBlocks()
+                .stream()
+                .filter(layoutBlock -> layoutBlock.getClass().equals(ContextBlock.class))
+                .findAny()
+                .orElseThrow())
+                .getElements()
+                .get(0))
+                .getText();
+
+        String unmarkdownedDetails = StringUtils.remove(markdownDetailsText, "```");
+        return new ObjectMapper().readValue(unmarkdownedDetails, ObjectNode.class);
     }
 
     @SneakyThrows
