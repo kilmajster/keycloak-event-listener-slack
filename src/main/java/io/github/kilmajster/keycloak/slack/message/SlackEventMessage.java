@@ -11,6 +11,7 @@ import org.keycloak.models.utils.ModelToRepresentation;
 import org.keycloak.util.JsonSerialization;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -82,13 +83,9 @@ public final class SlackEventMessage {
                                 .text("*Event type:*\n" + eventType)
                                 .build(),
                         MarkdownTextObject.builder()
-                                .text("*When:*\n" + asDateTimeWithOffset(eventTime))
+                                .text("*When:*\n" + ZonedDateTime.ofInstant(Instant.ofEpochMilli(eventTime), ZoneId.systemDefault()))
                                 .build()
                 )).build();
-    }
-
-    private static ZonedDateTime asDateTimeWithOffset(final long timestamp) {
-        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).withFixedOffsetZone();
     }
 
     private static SectionBlock realmAndClientBlock(final String realmName, final String clientId) {
