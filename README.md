@@ -136,3 +136,9 @@ in `docker-compose.yml` file and run:
 $ docker-compose up
 ```
 Enable listener, just like it is described in _Enabling listener in Keycloak_ section.
+
+#### Running automation tests locally
+Build a project with `mvn clean install`, and run:
+```sh
+$  mvn verify -P automation-tests -D slack.token=<your Slack token> -D slack.channel=<your Slack channel>
+```
