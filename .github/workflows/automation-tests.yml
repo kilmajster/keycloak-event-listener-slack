@@ -19,9 +19,6 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Set version from git commit SHA
-        run: mvn -B -ntp versions:set -DgenerateBackupPoms=false -DnewVersion="${GITHUB_SHA::7}"
-
       - name: Build jar file
         run: mvn -B -ntp package
 
