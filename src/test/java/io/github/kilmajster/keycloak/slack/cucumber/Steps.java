@@ -51,7 +51,7 @@ public class Steps {
             new File(DOCKER_COMPOSE_FILENAME))
             .withEnv("SLACK_TOKEN", SLACK_TOKEN)
             .withEnv("SLACK_CHANNEL", SLACK_CHANNEL)
-            .withExposedService(DOCKER_KEYCLOAK_SERVICE, DOCKER_KEYCLOAK_PORT, Wait.forHttp("/"))
+            .withExposedService(DOCKER_KEYCLOAK_SERVICE, DOCKER_KEYCLOAK_PORT, Wait.defaultWaitStrategy())
             .withLogConsumer(DOCKER_KEYCLOAK_SERVICE, new Slf4jLogConsumer(log));
 
     private final Keycloak keycloak = Keycloak.getInstance(
@@ -122,6 +122,8 @@ public class Steps {
                 .create(user);
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.SC_CREATED);
+
+        log.info("Test user ({}) generated successfully.", TEST_USERNAME);
     }
 
     @When("user navigates to account console page")
@@ -139,6 +141,7 @@ public class Steps {
         assertThat(
                 $(By.id("kc-form-login")).isDisplayed()
         ).isTrue();
+        log.info("Login form is visible.");
     }
 
     @When("user log into account console with valid credentials")
@@ -151,13 +154,14 @@ public class Steps {
     @Then("user should be logged into account console")
     public void verify_that_user_is_logged_in() {
         $(By.id("landingLoggedInUser")).shouldHave(text(TEST_USERNAME));
+        log.info("User logged in successfully.");
     }
 
     @Then("message with LOGIN event was delivered to Slack")
     @SneakyThrows
     public void slack_message_was_sent() {
         String channelId = findChannelId();
-        log.info("Found channel id = {}", channelId);
+        log.info("Found {} channel id = {}", SLACK_CHANNEL, channelId);
 
         Message latestSlackMessage = findLatestSlackMessage(channelId);
         log.info("Fetched latest Slack message = {}", latestSlackMessage);

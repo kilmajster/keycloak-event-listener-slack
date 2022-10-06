@@ -31,7 +31,7 @@ Minimal Dockerfile for bundling this extension together with Keycloak could look
 ```dockerfile
 FROM quay.io/keycloak/keycloak:18.0.2
 
-ARG SLACK_LISTENER_VERSION=0.0.1
+ARG SLACK_LISTENER_VERSION=0.1.0
 
 RUN curl -s -L -o /opt/keycloak/providers/keycloak-event-listener-slack--$SLACK_LISTENER_VERSION.jar \
     https://github.com/kilmajster/keycloak-event-listener-slack/releases/download/$SLACK_LISTENER_VERSION/keycloak-event-listener-slack-$SLACK_LISTENER_VERSION.jar
@@ -136,3 +136,9 @@ in `docker-compose.yml` file and run:
 $ docker-compose up
 ```
 Enable listener, just like it is described in _Enabling listener in Keycloak_ section.
+
+#### Running automation tests locally
+Build a project with `mvn clean install`, and run:
+```sh
+$  mvn verify -P automation-tests -D slack.token=<your Slack token> -D slack.channel=<your Slack channel>
+```

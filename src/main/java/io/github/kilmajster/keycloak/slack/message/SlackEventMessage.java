@@ -11,20 +11,26 @@ import org.keycloak.models.utils.ModelToRepresentation;
 import org.keycloak.util.JsonSerialization;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public final class SlackEventMessage {
 
-    public static String eventTitle(String host) {
+    public static String eventTitle(final String host) {
         return "New event has just occurred in Keycloak at " + host;
     }
 
-    public static String adminEventTitle(String host) {
+    public static String adminEventTitle(final String host) {
         return "New admin event has just occurred in Keycloak at " + host;
     }
 
-    public static List<LayoutBlock> getEventMessageBlocks(Event event, String realmName, String host, boolean includeEventRepresentationEnabled) throws JsonProcessingException {
+    public static List<LayoutBlock> getEventMessageBlocks(
+            final Event event,
+            final String realmName,
+            final String host,
+            final boolean includeEventRepresentationEnabled) throws JsonProcessingException {
         if (includeEventRepresentationEnabled) {
             return List.of(
                     headerBlock(eventTitle(host)),
@@ -33,15 +39,19 @@ public final class SlackEventMessage {
                     representationBlock(event)
             );
         }
+
         return List.of(
                 headerBlock(eventTitle(host)),
                 eventTypeAndTimeBlock(event.getType().name(), event.getTime()),
                 realmAndClientBlock(realmName, event.getClientId())
         );
-
     }
 
-    public static List<LayoutBlock> getEventMessageBlocks(AdminEvent adminEvent, String realmName, String host, boolean includeAdminEventRepresentationEnabled) throws JsonProcessingException {
+    public static List<LayoutBlock> getEventMessageBlocks(
+            final AdminEvent adminEvent,
+            final String realmName,
+            final String host,
+            final boolean includeAdminEventRepresentationEnabled) throws JsonProcessingException {
         if (includeAdminEventRepresentationEnabled) {
             return List.of(
                     headerBlock(adminEventTitle(host)),
@@ -50,12 +60,12 @@ public final class SlackEventMessage {
                     representationBlock(adminEvent)
             );
         }
+
         return List.of(
                 headerBlock(adminEventTitle(host)),
                 eventTypeAndTimeBlock(adminEvent.getOperationType().name(), adminEvent.getTime()),
                 realmAndClientBlock(realmName, adminEvent.getResourceTypeAsString())
         );
-
     }
 
     private static SectionBlock headerBlock(final String title) {
@@ -73,7 +83,7 @@ public final class SlackEventMessage {
                                 .text("*Event type:*\n" + eventType)
                                 .build(),
                         MarkdownTextObject.builder()
-                                .text("*When:*\n" + Instant.ofEpochMilli(eventTime).atZone(ZoneOffset.UTC))
+                                .text("*When:*\n" + ZonedDateTime.ofInstant(Instant.ofEpochMilli(eventTime), ZoneId.systemDefault()))
                                 .build()
                 )).build();
     }
@@ -102,7 +112,7 @@ public final class SlackEventMessage {
                 )).build();
     }
 
-    private static ContextBlock representationBlock(Event event) throws JsonProcessingException {
+    private static ContextBlock representationBlock(final Event event) throws JsonProcessingException {
         return ContextBlock.builder()
                 .elements(List.of(
                         MarkdownTextObject.builder()
@@ -114,7 +124,7 @@ public final class SlackEventMessage {
                 )).build();
     }
 
-    private static ContextBlock representationBlock(AdminEvent event) throws JsonProcessingException {
+    private static ContextBlock representationBlock(final AdminEvent event) throws JsonProcessingException {
         return ContextBlock.builder()
                 .elements(List.of(
                         MarkdownTextObject.builder()
