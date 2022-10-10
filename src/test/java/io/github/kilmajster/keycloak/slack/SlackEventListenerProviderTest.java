@@ -1,7 +1,6 @@
 package io.github.kilmajster.keycloak.slack;
 
 import io.github.kilmajster.keycloak.slack.config.SlackConfiguration;
-import io.github.kilmajster.keycloak.slack.message.SlackMessageSender;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,8 +9,6 @@ import org.keycloak.events.Event;
 import org.keycloak.events.EventType;
 import org.keycloak.events.admin.AdminEvent;
 import org.keycloak.events.admin.OperationType;
-import org.keycloak.models.KeycloakContext;
-import org.keycloak.models.KeycloakSession;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,13 +21,10 @@ import static org.mockito.Mockito.*;
 class SlackEventListenerProviderTest {
 
     @Mock
-    private KeycloakSession session;
-
-    @Mock
     private SlackConfiguration slackConfiguration;
 
     @Mock
-    private SlackMessageSender slackMessageSender;
+    private SlackEventListenerTransaction slackEventListenerTransaction;
 
     @InjectMocks
     private SlackEventListenerProvider slackEventListenerProvider;
@@ -41,23 +35,14 @@ class SlackEventListenerProviderTest {
         final EventType eventType = EventType.LOGIN;
         final Event event = mockEventForType(eventType);
         mockSupportedEventType(eventType);
-        final KeycloakContext context = mockContextForSession();
 
         // when
         slackEventListenerProvider.onEvent(event);
 
         // then
-        verify(slackMessageSender).sendEventMessage(
-                eq(context),
+        verify(slackEventListenerTransaction).addEvent(
                 eq(event)
         );
-    }
-
-    private KeycloakContext mockContextForSession() {
-        final KeycloakContext context = mock(KeycloakContext.class);
-        when(session.getContext()).thenReturn(context);
-
-        return context;
     }
 
     private Event mockEventForType(EventType type) {
@@ -82,7 +67,7 @@ class SlackEventListenerProviderTest {
         slackEventListenerProvider.onEvent(event);
 
         // then
-        verifyNoInteractions(slackMessageSender);
+        verifyNoInteractions(slackEventListenerTransaction);
     }
 
     @ParameterizedTest
@@ -92,15 +77,14 @@ class SlackEventListenerProviderTest {
         final OperationType operationType = OperationType.CREATE;
         final AdminEvent event = mockEventForType(operationType);
         mockSupportedAdminEventType(operationType);
-        final KeycloakContext context = mockContextForSession();
 
         // when
         slackEventListenerProvider.onEvent(event, includeRepresentation);
 
         // then
-        verify(slackMessageSender).sendAdminEventMessage(
-                eq(context),
-                eq(event)
+        verify(slackEventListenerTransaction).addAdminEvent(
+                eq(event),
+                eq(includeRepresentation)
         );
     }
 
@@ -127,6 +111,6 @@ class SlackEventListenerProviderTest {
         slackEventListenerProvider.onEvent(event, includeRepresentation);
 
         // then
-        verifyNoInteractions(slackMessageSender);
+        verifyNoInteractions(slackEventListenerTransaction);
     }
 }
