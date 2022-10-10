@@ -31,7 +31,7 @@ Minimal Dockerfile for bundling this extension together with Keycloak could look
 ```dockerfile
 FROM quay.io/keycloak/keycloak:18.0.2
 
-ARG SLACK_LISTENER_VERSION=0.1.0
+ARG SLACK_LISTENER_VERSION=0.3.0
 
 RUN curl -s -L -o /opt/keycloak/providers/keycloak-event-listener-slack--$SLACK_LISTENER_VERSION.jar \
     https://github.com/kilmajster/keycloak-event-listener-slack/releases/download/$SLACK_LISTENER_VERSION/keycloak-event-listener-slack-$SLACK_LISTENER_VERSION.jar
