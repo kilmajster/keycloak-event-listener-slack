@@ -18,9 +18,19 @@ public class SlackEventListenerProviderFactory implements EventListenerProviderF
 
     @Override
     public EventListenerProvider create(KeycloakSession session) {
-        final SlackMessageSender slackMessageSender = new SlackMessageSender(slack, slackConfiguration);
+        final SlackMessageSender slackMessageSender = new SlackMessageSender(
+                slack,
+                slackConfiguration
+        );
 
-        return new SlackEventListenerProvider(session, slackConfiguration, slackMessageSender);
+        final SlackEventListenerTransaction slackEventListenerTransaction = new SlackEventListenerTransaction(
+                session.getContext(),
+                slackMessageSender
+        );
+
+        session.getTransactionManager().enlistAfterCompletion(slackEventListenerTransaction);
+
+        return new SlackEventListenerProvider(slackConfiguration, slackEventListenerTransaction);
     }
 
     @Override
